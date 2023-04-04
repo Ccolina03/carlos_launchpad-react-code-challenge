@@ -1,10 +1,10 @@
-import React from "react";
-import Home from "./Home/Home";
-import { Store } from "redux";
+import React from "react"
 
 const App = () => {
   return (
-   <Home/>
+    <h1 className="text-3xl font-bold underline">
+      Hello world!
+    </h1>
   )
 }
 
