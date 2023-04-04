@@ -1,28 +1,27 @@
 import React, { useState, useRef } from 'react';
 import Modal from './Modal/Modal';
-import { addNewPost } from './store/AddPostSlice';
-import { useDispatch } from 'react-redux';
 
+import { addNewPost} from './store/GetPostsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPostsStatus } from './store/GetPostsSlice';
 
 const AddPostModal = ({ showModal, setShowModal }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [userId, setUserId] = useState(1); // default user ID
 
-  const dispatch = useDispatch
+  const dispatch = useDispatch()
   const modalContentRef = useRef(null)
+  const addPostStatus = useSelector(getPostsStatus)
+  const isAddPostLoading = addPostStatus && addPostStatus === 'loading';
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const newPost = { title, body, userId };
-    try {
-      await dispatch(addNewPost(newPost));
+      dispatch(addNewPost(newPost));
       console.log(newPost)
       setShowModal(false);
       alert('Post added successfully!');
-    } catch (error) {
-      alert('Error adding post');
-    }
   };
   
 
@@ -73,8 +72,12 @@ const AddPostModal = ({ showModal, setShowModal }) => {
         />
       </div>
       <footer className="modal__content modal__footer">
-        <button className="bg-black hover:bg-pink-300 text-white font-bold py-2 px-4 rounded" type="submit">
-          Add Post
+      <button
+          className="bg-black hover:bg-pink-300 text-white font-bold py-2 px-4 rounded"
+          type="submit"
+          disabled={isAddPostLoading}
+        >
+           {isAddPostLoading ? 'Adding post...' : 'Add Post'}
         </button>
       </footer>
     </>

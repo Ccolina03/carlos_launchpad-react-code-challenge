@@ -57,6 +57,17 @@ export const deletePost = createAsyncThunk(
 
 
   //sending post to api
+
+  export const addNewPost = createAsyncThunk(
+    'posts/addNewPost', 
+    async (newPost) => {
+      const response = axios.post('https://jsonplaceholder.typicode.com/posts', newPost, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response.data
+  });
   
 
 
@@ -113,10 +124,22 @@ const getPostsSlice = createSlice({
       })
       .addCase(deletePost.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        const postId = action.payload.id;
+        const postId = action.payload;
         state.posts = state.posts.filter((post) => post.id !== postId);
       })
       .addCase(deletePost.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+
+      //sending post
+      .addCase(addNewPost.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(addNewPost.fulfilled, (state) => {
+        state.status = 'succeeded';
+      })
+      .addCase(addNewPost.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
       });
@@ -126,5 +149,6 @@ const getPostsSlice = createSlice({
 export const selectAllPost = (state) => state.posts.posts;
 export const getPostsStatus = (state) => state.posts.status;
 export const getPostsError = (state) => state.posts.error;
+
 
 export default getPostsSlice.reducer;
