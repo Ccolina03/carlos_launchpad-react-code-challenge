@@ -1,6 +1,22 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { editPost } from "./store/GetPostsSlice";
 
-const EditPostForm = ({ title, body, userId, handleSubmit, handleTitleChange, handleBodyChange, handleUserIdChange }) => {
+const EditPostForm = ({ title, body, userId, handleTitleChange, handleBodyChange, handleUserIdChange }) => {
+  const dispatch = useDispatch();
+  const { status } = useSelector((state) => state.posts);
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const post = {
+      title: title,
+      body: body,
+      userId: userId,
+      id: Math.floor(Math.random() * 100) + 1,
+    };
+    dispatch(editPost(post));
+  };
+
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto">
       <div className="mb-4">
@@ -33,7 +49,7 @@ const EditPostForm = ({ title, body, userId, handleSubmit, handleTitleChange, ha
         />
       </div>
       <button type="submit" className="bg-black hover:bg-pink-300 text-white font-bold py-2 px-4 rounded">
-        Save Changes
+        {status === "loading" ? "Loading..." : "Save Changes"}
       </button>
     </form>
   )
