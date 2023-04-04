@@ -24,33 +24,7 @@ export const AddPostSlice = createSlice({
     status: 'idle',
     error: null,
   },
-  reducers: {
-    postAdded: (state) => {
-      state.status = 'succeeded';
-      state.error = null;
-    },
-    postFailed: (state, action) => {
-      state.status = 'failed';
-      state.error = action.payload;
-    },
-    postRequested: (state) => {
-      state.status = 'loading';
-      state.error = null;
-    },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(addNewPost.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(addNewPost.fulfilled, (state) => {
-        state.status = 'succeeded';
-      })
-      .addCase(addNewPost.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      });
-  },
+  reducers: {}
 });
 
 export const { postAdded, postFailed, postRequested } = AddPostSlice.actions;
