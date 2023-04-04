@@ -1,50 +1,58 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+export const addNewPost = createAsyncThunk('posts/addNewPost', async (newPost) => {
+  try {
+    const response = await axios.post('https://jsonplaceholder.typicode.com/posts', newPost, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (response.status === 201) {
+      return response.data;
+    } else {
+      throw new Error('Error adding post');
+    }
+  } catch (error) {
+    throw new Error('Error adding post');
+  }
+});
 
-const addPostSlice = createSlice({
-    name: 'addPost',
-    initialState: {
-      title: '',
-      body: '',
-      userId: 1,
-      status: 'idle', // could be idle, loading, succeeded, or failed
-      error: null,
+export const AddPostSlice = createSlice({
+  name: 'posts',
+  initialState: {
+    status: 'idle',
+    error: null,
+  },
+  reducers: {
+    postAdded: (state) => {
+      state.status = 'succeeded';
+      state.error = null;
     },
-    reducers: {
-      setTitle: (state, action) => {
-        state.title = action.payload;
-      },
-      setBody: (state, action) => {
-        state.body = action.payload;
-      },
-      setUserId: (state, action) => {
-        state.userId = action.payload;
-      },
-      setStatus: (state, action) => {
-        state.status = action.payload;
-      },
-      setError: (state, action) => {
-        state.error = action.payload;
-      },
-      reset: (state) => {
-        state.title = '';
-        state.body = '';
-        state.userId = 1;
-        state.status = 'idle';
-        state.error = null;
-      },
+    postFailed: (state, action) => {
+      state.status = 'failed';
+      state.error = action.payload;
     },
-  });
-  
+    postRequested: (state) => {
+      state.status = 'loading';
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(addNewPost.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(addNewPost.fulfilled, (state) => {
+        state.status = 'succeeded';
+      })
+      .addCase(addNewPost.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      });
+  },
+});
 
-  export const {
-    setTitle,
-    setBody,
-    setUserId,
-    setStatus,
-    setError,
-    reset,
-  } = addPostSlice.actions;
-  
-  export const addPostReducer = addPostSlice.reducer;
+export const { postAdded, postFailed, postRequested } = AddPostSlice.actions;
+
+export default AddPostSlice.reducer;

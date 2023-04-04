@@ -1,35 +1,30 @@
 import React, { useState, useRef } from 'react';
 import Modal from './Modal/Modal';
+import { addNewPost } from './store/AddPostSlice';
+import { useDispatch } from 'react-redux';
+
 
 const AddPostModal = ({ showModal, setShowModal }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [userId, setUserId] = useState(1); // default user ID
 
+  const dispatch = useDispatch
   const modalContentRef = useRef(null)
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const newPost = { title, body, userId };
     try {
-      const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newPost),
-      });
-      console.log(response.status) //giving 200 status code
-      if (response.ok) {
-        setShowModal(false);
-        alert('Post added successfully!');
-      } else {
-        alert('Error adding post');
-      }
+      await dispatch(addNewPost(newPost));
+      console.log(newPost)
+      setShowModal(false);
+      alert('Post added successfully!');
     } catch (error) {
       alert('Error adding post');
     }
   };
+  
 
   const handleCloseModal = () => {
     console.log('Closing modal');
