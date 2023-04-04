@@ -1,9 +1,10 @@
-import React from "react"
+import React from "react";
+import Home from "./Home/Home";
 
-export default function App() {
+const App = () => {
   return (
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+   <Home/>
   )
 }
+
+export default App;

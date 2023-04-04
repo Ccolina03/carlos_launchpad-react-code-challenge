@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import {useDispatch, useSelector} from 'react-redux';
 import { selectAllPost, getPostsStatus, getPostsError, fetchPosts} from './store/GetPostsSlice'
 import { fetchSpecificPost } from "./store/GetPostsSlice";
