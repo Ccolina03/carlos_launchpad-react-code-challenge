@@ -9,12 +9,12 @@ const TabBar = () => {
                     Vog Challenge
                 </span>
                 <div className="space-x-5">
-                    <div className="text-lg pt-1 font-light text-white">
+                    <Link to="/" className="text-lg pt-1 font-light text-white">
                         Home
-                    </div>
-                    <div className="text-lg pt-1 font-light text-white">
+                    </Link>
+                    <Link to="/postal-lookup" className="text-lg pt-1 font-light text-white">
                         Postal lookup
-                    </div>
+                    </Link>
                 </div>
             </div>
         </header>

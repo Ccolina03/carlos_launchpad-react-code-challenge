@@ -14,7 +14,7 @@ const INITIAL_POSTS_STATE = {
 
 // getting data from API
 export const fetchPosts = createAsyncThunk(
-  'carlos_colina_launchpad-react-code-challenge/',
+  '/',
   async () => {
     const response = await axios.get(POSTS_URL);
     return response.data;
